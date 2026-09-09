@@ -39,9 +39,6 @@ The entire game must be **as tiny as possible** (aiming for the JS13K < 13KB zip
 - Reduced-motion preferences suppress squash, bounce, and particles while preserving progress, combo feedback, and the win dialog. Dialogs manage keyboard focus and pause board input.
 - When no moves remain: a "Game Over" overlay with final score and a "Try Again" button.
 
-### Footer
-- A minimal footer line with the remix link: `<a href="/remix">Remix on Berrry</a>`.
-
 ## Controls & Functionality
 
 - **Keyboard:** Arrow keys (and WASD) slide tiles in the four directions.
