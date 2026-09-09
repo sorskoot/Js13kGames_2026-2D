@@ -1,0 +1,25 @@
+{
+    "name": "js13kgames_2026-2d",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "start": "node scripts/build.ts dev",
+        "dev": "node scripts/build.ts dev",
+        "build": "node scripts/build.ts prod",
+        "lint": "tsc --noEmit"
+    },
+    "keywords": [],
+    "author": "Sorskoot",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^26.2.0",
+        "advzip-bin": "^2.0.0",
+        "esbuild": "^0.28.2",
+        "typescript": "^7.0.2"
+    }
+}

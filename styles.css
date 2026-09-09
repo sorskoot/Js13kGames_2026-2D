@@ -1,0 +1,91 @@
+/* Rainbow Merge — tiny whimsical 2048 with colors */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;800&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,182,193,.6), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(173,216,230,.6), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(221,160,221,.6), transparent 55%),
+    linear-gradient(160deg, #fdf3ff, #eef6ff);
+  color: #3a2b52;
+  overflow-x: hidden;
+  padding: 12px;
+}
+
+#wrap { width: 100%; max-width: 480px; }
+
+#hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+}
+#title { font-weight: 800; font-size: clamp(20px, 6vw, 30px); letter-spacing: -.5px; }
+
+#scores { display: flex; gap: 8px; }
+.sc {
+  background: rgba(255,255,255,.7);
+  border-radius: 12px; padding: 6px 14px;
+  display: flex; flex-direction: column; align-items: center;
+  box-shadow: 0 4px 12px rgba(120,80,160,.12);
+  backdrop-filter: blur(6px);
+}
+.sc span { font-size: 10px; font-weight: 800; letter-spacing: 1px; opacity: .55; }
+.sc b { font-size: 20px; font-variant-numeric: tabular-nums; }
+
+canvas { display: block; width: 100%; height: auto; border-radius: 20px; touch-action: none; }
+
+#controls { margin-top: 14px; }
+#hint { font-weight: 200; font-size: 14px; opacity: .8; margin-bottom: 12px; }
+
+#legend { display: flex; gap: 4px; margin-bottom: 14px; }
+.lg {
+  flex: 1; height: 18px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.4);
+}
+
+button {
+  font-family: inherit; font-weight: 800; font-size: 15px;
+  border: none; cursor: pointer;
+  padding: 12px 22px; border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff70b8, #a56bff);
+  box-shadow: 0 6px 16px rgba(165,107,255,.35);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+button:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(165,107,255,.45); }
+button:active { transform: translateY(0) scale(.97); }
+
+#footer { margin-top: 18px; text-align: center; font-size: 12px; font-weight: 200; }
+#footer a { color: #a56bff; text-decoration: none; font-weight: 800; }
+#footer a:hover { text-decoration: underline; }
+
+/* overlay */
+#overlay {
+  position: fixed; inset: 0;
+  background: rgba(58,43,82,.45);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; padding: 20px;
+  transition: opacity .25s ease;
+}
+#overlay.hidden { opacity: 0; pointer-events: none; }
+#ov-card {
+  background: linear-gradient(160deg, #fff, #fbeeff);
+  border-radius: 24px; padding: 32px 28px; text-align: center;
+  box-shadow: 0 20px 60px rgba(80,40,120,.4);
+  max-width: 340px; width: 100%;
+  animation: pop .35s cubic-bezier(.2,1.4,.4,1);
+}
+@keyframes pop { from { transform: scale(.6); opacity: 0; } }
+#ov-msg { font-weight: 800; font-size: 26px; margin-bottom: 8px; }
+#ov-sub { font-weight: 200; font-size: 15px; opacity: .8; margin-bottom: 22px; }
+#ov-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.hidden { display: none; }
+#overlay.hidden { display: flex; }
+</parameter>
+</invoke>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Rainbow Merge 🌈🦄</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="wrap">
+  <header id="hd">
+    <div id="title">🌈 Rainbow Merge</div>
+    <div id="scores">
+      <div class="sc"><span>SCORE</span><b id="score">0</b></div>
+      <div class="sc"><span>BEST</span><b id="best">0</b></div>
+    </div>
+  </header>
+  <canvas id="canvas"></canvas>
+  <div id="controls">
+    <div id="hint">Swipe or use arrow keys to merge colors up the rainbow!</div>
+    <div id="legend"></div>
+    <button id="new">New Game</button>
+  </div>
+  <div id="footer"><a href="/remix">Remix on Berrry</a></div>
+</div>
+<div id="overlay" class="hidden">
+  <div id="ov-card">
+    <div id="ov-msg"></div>
+    <div id="ov-sub"></div>
+    <div id="ov-btns">
+      <button id="ov-keep" class="hidden">Keep Going</button>
+      <button id="ov-new">New Game</button>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
