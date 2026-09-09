@@ -1,30 +1,21 @@
 export const GRID_SIZE = 4;
 
 export const COLORS = [
-    '#e53935',
-    '#fb8c00',
-    '#fdd835',
-    '#c0ca33',
-    '#43a047',
-    '#00acc1',
-    '#1e88e5',
-    '#3949ab',
-    '#8e24aa',
-    '#ff69b4',
+    '#f16b87',
+    '#ffa25e',
+    '#f6d15a',
+    '#70ce9c',
+    '#60d2df',
+    '#719ded',
+    '#b28ae0',
+    '#f3a5d2',
+    '#fff2fc'
 ];
 
-export const NAMES = [
-    'Red',
-    'Orange',
-    'Yellow',
-    'Lime',
-    'Green',
-    'Teal',
-    'Blue',
-    'Indigo',
-    'Violet',
-    'Unicorn',
-];
+export const NAMES = ['Red', 'Orange', 'Yellow', 'Green', 'Cyan', 'Blue', 'Purple', 'Rainbow', 'Unicorn'];
+
+export const UNICORN_TIER = NAMES.length;
+export const MOVE_DURATION = 140;
 
 export type Direction = 0 | 1 | 2 | 3;
 export type CellCoordinates = [row: number, column: number];
@@ -33,9 +24,11 @@ export type TileAnimation = {
     r: number;
     c: number;
     t: number;
+    emitted?: boolean;
 };
 export type MoveAnimation = {
     type: 'move';
+    value: number;
     fr: number;
     fc: number;
     tr: number;
@@ -49,4 +42,8 @@ export type Particle = {
     vy: number;
     life: number;
     col: string;
+    size: number;
+    decay: number;
+    rotation: number;
+    shape: number;
 };

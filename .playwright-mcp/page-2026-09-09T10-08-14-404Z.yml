@@ -1,0 +1,41 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: A POCKETFUL OF MAGIC
+      - heading "Rainbow Merge" [level=1] [ref=e6]:
+        - generic [ref=e7]: Rainbow
+        - text: Merge
+    - generic [ref=e8]:
+      - img "A unicorn under a rainbow" [ref=e9]
+      - text: THE DREAM
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: SCORE
+        - text: "0"
+      - generic [ref=e14]:
+        - generic [ref=e15]: PERSONAL BEST
+        - text: "0"
+    - button "New game" [ref=e16] [cursor=pointer]:
+      - generic [aria-hidden] [ref=e17]: ↻
+  - generic [ref=e18]:
+    - generic "4 by 4 rainbow puzzle. empty, empty, empty, Red; empty, empty, empty, empty; empty, empty, empty, Red; empty, empty, empty, empty. Use arrow keys or swipe to merge." [ref=e19]
+    - status
+  - region [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Rainbow Journey" [level=2] [ref=e22]
+      - generic [ref=e23]: Red1 / 9
+    - list [ref=e24]:
+      - listitem "Red" [ref=e25]
+      - listitem "Orange" [ref=e27]
+      - listitem "Yellow" [ref=e29]
+      - listitem "Green" [ref=e31]
+      - listitem "Cyan" [ref=e33]
+      - listitem "Blue" [ref=e35]
+      - listitem "Purple" [ref=e37]
+      - listitem "Rainbow" [ref=e39]
+      - listitem "Unicorn" [ref=e41]
+  - generic [ref=e43]:
+    - generic [ref=e44]: A little world of wonder
+    - link "Remix on Berrry ↗" [ref=e45] [cursor=pointer]:
+      - /url: /remix

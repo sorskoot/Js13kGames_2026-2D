@@ -11,10 +11,10 @@ The entire game must be **as tiny as possible** (aiming for the JS13K < 13KB zip
 ## Core Concept
 
 - A 4×4 grid (standard 2048 board).
-- Tiles are solid color swatches instead of numbers.
-- Merging two identical colors advances them one step along a **10-color progression**.
-- The base rainbow order is: **Red → Orange → Yellow → Green → Blue → Violet**, extended to 10 distinct colors so the ramp feels satisfying (e.g. Red, Orange, Yellow, Chartreuse/Lime, Green, Teal/Cyan, Blue, Indigo, Violet/Purple, and finally the **Unicorn** tile as color #10).
-- Reaching the 10th step yields a **Unicorn tile** (drawn with a simple procedural sparkle/unicorn glyph) = the win condition.
+- Tiles are glossy pastel candy gems with distinct symbols instead of numbers.
+- Merging two identical colors advances them along a **nine-step Rainbow Journey**: Red, Orange, Yellow, Green, Cyan, Blue, Purple, Rainbow, and Unicorn.
+- Two Rainbow tiles merge into the ultimate **Unicorn** tile. Unicorns are terminal tiles and cannot merge further.
+- Each color has a distinct candy-gem symbol. The unicorn uses shared procedural artwork in the board, journey, header, and celebration.
 
 ## UI Elements
 
@@ -24,20 +24,19 @@ The entire game must be **as tiny as possible** (aiming for the JS13K < 13KB zip
 - Keep text minimal — a single system font (`font-family: sans-serif`) to save bytes.
 
 ### Game Board
-- A centered square canvas containing the 4×4 grid.
-- Rounded-rectangle tiles with soft drop shadows drawn on the canvas.
-- Empty cells rendered as faint translucent slots.
-- Each tile shows its color as a filled rounded square; optionally a tiny label/number of the color index for accessibility, kept subtle.
-- Smooth **slide and merge animations** (tiles lerp to their new positions; merged tiles do a quick "pop" scale bounce).
-- The **Unicorn tile** gets special treatment: an animated rainbow gradient fill plus a simple sparkle/star glyph so it clearly reads as the win tile.
+- A centered square canvas containing the 4×4 grid, with a beveled candy-glass frame and recessed lavender slots.
+- Glossy rounded gems with depth, highlights, shadows, and a distinct symbol for each color.
+- Sliding tiles retain their source color until the merge lands, squash together, then bounce with a glow ring and particles. Higher tiers produce more particles; Purple and above emit rainbow colors.
+- The **Unicorn tile** has a pearlescent rainbow finish, a soft animated glow, and custom unicorn artwork.
 
 ### Controls / Instructions
-- Below the board: a one-line hint — "Swipe or use arrow keys to merge colors up the rainbow!"
-- A small **New Game** button (rounded, subtle) to reset the board.
-- Optional **legend/progress strip** showing the 10-color ramp so players understand the target order, with the current highest achieved color subtly highlighted.
+- A compact restart icon beside the score and personal best, with a New Game tooltip and accessible name.
+- A **Rainbow Journey** beneath the board shows all nine named gems, highlighting the current highest color and its step count.
+- Multiple merges in one move or consecutive merging moves show brief combo feedback. Combos of five or more, or combos that produce Rainbow or Unicorn, show "RAINBOW COMBO!".
 
 ### Win / Game Over Overlay
-- When a Unicorn is created: a celebratory overlay ("🦄 You made a Unicorn!") with a "Keep Going" and "New Game" option, plus a burst of confetti/sparkle particles drawn on canvas.
+- The first Unicorn triggers a large full-screen rainbow/unicorn animation with waves of rainbow confetti, stars, and sparkles, followed by a "Hello, little unicorn!" dialog. Keep Going resumes without repeating the win celebration; New Game resets all pending animations and timers.
+- Reduced-motion preferences suppress squash, bounce, and particles while preserving progress, combo feedback, and the win dialog. Dialogs manage keyboard focus and pause board input.
 - When no moves remain: a "Game Over" overlay with final score and a "Try Again" button.
 
 ### Footer
@@ -50,7 +49,7 @@ The entire game must be **as tiny as possible** (aiming for the JS13K < 13KB zip
 - **Merge logic:** Standard 2048 sliding — tiles move fully in the chosen direction, adjacent equal colors merge once per move, a new low-color tile (mostly Red, occasionally Orange) spawns after each valid move.
 - **Scoring:** Each merge adds points scaled to the resulting color's rank; total and best score update live.
 - **Persistence:** Best score and (optionally) current board state saved to `localStorage` so progress survives refresh.
-- **Win condition:** Producing the 10th-step Unicorn tile triggers the win state; game can continue for a higher score.
+- **Win condition:** Producing the ninth-step Unicorn tile triggers the win state; game can continue for a higher score when legal moves remain.
 - **Lose condition:** Board full with no possible merges triggers game over.
 
 ## Styling Preferences

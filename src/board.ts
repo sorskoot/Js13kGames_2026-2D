@@ -1,5 +1,5 @@
-import { GRID_SIZE } from './game-data.js';
-import type { CellCoordinates, Direction, MoveAnimation } from './game-data.js';
+import {GRID_SIZE, UNICORN_TIER} from './game-data.js';
+import type {CellCoordinates, Direction, MoveAnimation} from './game-data.js';
 
 export class Board {
     private cells: number[][] = [];
@@ -19,9 +19,7 @@ export class Board {
     }
 
     reset(): void {
-        this.cells = Array.from({ length: GRID_SIZE }, () =>
-            Array<number>(GRID_SIZE).fill(0),
-        );
+        this.cells = Array.from({length: GRID_SIZE}, () => Array<number>(GRID_SIZE).fill(0));
         this.currentScore = 0;
         this.hasWon = false;
     }
@@ -47,24 +45,24 @@ export class Board {
                 .map(([row, column]) => ({
                     value: this.cells[row][column],
                     row,
-                    column,
+                    column
                 }))
-                .filter((tile) => tile.value);
+                .filter(tile => tile.value);
             const result = [];
             for (let index = 0; index < values.length; index++) {
                 if (
                     index + 1 < values.length &&
                     values[index].value === values[index + 1].value &&
-                    values[index].value < 10
+                    values[index].value < UNICORN_TIER
                 ) {
                     const value = values[index].value + 1;
                     result.push({
                         value,
                         from: [values[index], values[index + 1]],
-                        merged: true,
+                        merged: true
                     });
                     this.currentScore += value * value * 2;
-                    if (value === 10) {
+                    if (value === UNICORN_TIER) {
                         this.hasWon = true;
                     }
                     index++;
@@ -72,7 +70,7 @@ export class Board {
                     result.push({
                         value: values[index].value,
                         from: [values[index]],
-                        merged: false,
+                        merged: false
                     });
                 }
             }
@@ -81,19 +79,17 @@ export class Board {
             for (let index = 0; index < result.length; index++) {
                 newLine[index] = result[index].value;
                 const [targetRow, targetColumn] = line[index];
-                result[index].from.forEach((source) => {
-                    if (
-                        source.row !== targetRow ||
-                        source.column !== targetColumn
-                    ) {
+                result[index].from.forEach(source => {
+                    if (source.row !== targetRow || source.column !== targetColumn) {
                         moved = true;
                     }
                     movements.push({
+                        value: source.value,
                         fr: source.row,
                         fc: source.column,
                         tr: targetRow,
                         tc: targetColumn,
-                        t: 0,
+                        t: 0
                     });
                 });
                 if (result[index].merged) {
@@ -110,7 +106,7 @@ export class Board {
         }
 
         if (moved) {
-            return { movements, merges };
+            return {movements, merges};
         }
     }
 
@@ -120,16 +116,13 @@ export class Board {
         }
         for (let row = 0; row < GRID_SIZE; row++) {
             for (let column = 0; column < GRID_SIZE; column++) {
-                if (
-                    column + 1 < GRID_SIZE &&
-                    this.cells[row][column] === this.cells[row][column + 1]
-                ) {
+                if (this.cells[row][column] === UNICORN_TIER) {
+                    continue;
+                }
+                if (column + 1 < GRID_SIZE && this.cells[row][column] === this.cells[row][column + 1]) {
                     return true;
                 }
-                if (
-                    row + 1 < GRID_SIZE &&
-                    this.cells[row][column] === this.cells[row + 1][column]
-                ) {
+                if (row + 1 < GRID_SIZE && this.cells[row][column] === this.cells[row + 1][column]) {
                     return true;
                 }
             }

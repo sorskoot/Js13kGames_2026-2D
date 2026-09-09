@@ -1,17 +1,19 @@
-// Rainbow Merge — a tiny 2048-with-colors game.
-// 10 tiers: Red→Orange→Yellow→Lime→Green→Teal→Blue→Indigo→Violet→UNICORN.
-
-import { Board } from './board.js';
-import { GameUI } from './game-ui.js';
-import { InputController } from './input-controller.js';
-import { Renderer } from './renderer.js';
-import type { Direction } from './game-data.js';
+import {Board} from './board.js';
+import {GameUI} from './game-ui.js';
+import {InputController} from './input-controller.js';
+import {Renderer} from './renderer.js';
+import type {Direction} from './game-data.js';
+import {MOVE_DURATION} from './game-data.js';
 
 class Game {
     private readonly board = new Board();
     private readonly renderer: Renderer;
     private readonly ui: GameUI;
     private dead = false;
+    private busy = false;
+    private winShown = false;
+    private moveTimer = 0;
+    private winTimer = 0;
 
     constructor(canvas: HTMLCanvasElement) {
         this.renderer = new Renderer(canvas);
@@ -26,13 +28,18 @@ class Game {
     }
 
     private readonly newGame = (): void => {
+        clearTimeout(this.moveTimer);
+        clearTimeout(this.winTimer);
         this.board.reset();
         this.dead = false;
+        this.busy = false;
+        this.winShown = false;
         this.renderer.reset();
+        this.ui.reset();
         this.addTile();
         this.addTile();
         this.ui.updateScore(this.board.score);
-        this.ui.hideOverlay();
+        this.ui.updateJourney(this.board.grid);
     };
 
     private addTile(): void {
@@ -43,29 +50,41 @@ class Game {
     }
 
     private readonly move = (direction: Direction): void => {
-        if (this.dead) {
+        if (this.dead || this.busy || this.ui.overlayShown) {
             return;
         }
         const result = this.board.move(direction);
         if (!result) {
             return;
         }
-        this.renderer.animateMove(
-            result.movements,
-            result.merges,
-            this.board.grid,
-        );
+        this.busy = true;
+        this.renderer.animateMove(result.movements, result.merges, this.board.grid);
         this.ui.updateScore(this.board.score);
-        setTimeout(() => {
+        this.moveTimer = window.setTimeout(() => {
             this.addTile();
-            if (this.board.won && !this.ui.overlayShown) {
-                this.ui.showWin(this.board.score);
+            this.ui.updateJourney(this.board.grid);
+            this.ui.showCombo(
+                result.merges.length,
+                Math.max(0, ...result.merges.map(([row, column]) => this.board.grid[row][column]))
+            );
+            this.busy = false;
+            if (this.board.won && !this.winShown) {
+                this.winShown = true;
+                this.busy = true;
                 this.renderer.celebrate(this.board.grid);
+                this.winTimer = window.setTimeout(
+                    () => {
+                        this.busy = false;
+                        this.dead = !this.board.hasMoves();
+                        this.ui.showWin(this.board.score, !this.dead);
+                    },
+                    matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1500
+                );
             } else if (!this.board.hasMoves()) {
                 this.dead = true;
                 this.ui.showDead(this.board.score);
             }
-        }, 90);
+        }, MOVE_DURATION + 150);
     };
 
     private readonly draw = (): void => {

@@ -1,6 +1,6 @@
-import type { Plugin } from 'esbuild';
-import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import type {Plugin} from 'esbuild';
+import {copyFile, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
+import {dirname, join} from 'node:path';
 
 type ProcessHtmlOptions = {
     mode: 'dev' | 'prod';
@@ -24,21 +24,22 @@ export function processHtml(options: ProcessHtmlOptions): Plugin {
     return {
         name: 'process-html',
         setup(build) {
-            build.onEnd(async (result) => {
+            build.onEnd(async result => {
                 if (result.errors.length > 0) {
                     return;
                 }
 
                 const template = await readFile(options.templatePath, 'utf8');
-                const html = renderTemplate(template);
+                const styles = await readFile(join(dirname(options.templatePath), 'styles.css'), 'utf8');
+                const html = renderTemplate(template).replace(
+                    '<link rel="stylesheet" href="styles.css">',
+                    `<style>${styles}</style>`
+                );
                 const outputDirectory = dirname(options.outputPath);
 
-                await mkdir(outputDirectory, { recursive: true });
-                await writeFile(
-                    options.outputPath,
-                    options.mode === 'prod' ? minifyHtml(html) : html,
-                );
+                await mkdir(outputDirectory, {recursive: true});
+                await writeFile(options.outputPath, options.mode === 'prod' ? minifyHtml(html) : html);
             });
-        },
+        }
     };
 }
