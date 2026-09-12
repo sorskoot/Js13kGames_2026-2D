@@ -1,5 +1,6 @@
 import {NAMES, UNICORN_TIER} from './game-data.js';
 import {paintGem, paintRainbow, paintStar, paintUnicorn} from './magic-art.js';
+import {sound} from './sound.js';
 
 /**
  * Manages score, progress, overlays, combo feedback, and decorative game UI.
@@ -85,8 +86,9 @@ export class GameUI {
      * @param score - Final score to display
      */
     showDead(score: number): void {
+        sound.play(3);
         this.overlay.classList.remove('won');
-        this.message.textContent = 'A little cloud break';
+        this.message.textContent = 'Game Over';
         this.subtitle.textContent = 'No more matches. Your rainbow brought ' + score + ' points of magic.';
         this.keepButton.classList.add('hidden');
         this.showOverlay();
@@ -158,6 +160,7 @@ export class GameUI {
         if (combo < 2) {
             return;
         }
+        sound.play(1);
         clearTimeout(this.comboTimer);
         this.comboElement.className = '';
         void this.comboElement.offsetWidth;

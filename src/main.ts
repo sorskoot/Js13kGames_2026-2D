@@ -4,7 +4,7 @@ import {InputController} from './input-controller.js';
 import {Renderer} from './renderer.js';
 import type {Direction} from './game-data.js';
 import {MOVE_DURATION} from './game-data.js';
-import { sound } from './sound.js';
+import {sound} from './sound.js';
 
 declare const DEBUG: boolean;
 DEBUG && new EventSource('/esbuild').addEventListener('change', () => location.reload());
@@ -73,7 +73,9 @@ class Game {
         if (!result) {
             return;
         }
-        
+        if (result.merges.length > 0) {
+            sound.play(0);
+        }
         this.busy = true;
         this.renderer.animateMove(result.movements, result.merges, this.board.grid);
         this.ui.updateScore(this.board.score);
