@@ -1,9 +1,18 @@
 import type { Direction } from './game-data.js';
 
+/**
+ * Converts keyboard and touch gestures into directional game moves.
+ */
 export class InputController {
     private touchX: number | null = null;
     private touchY: number | null = null;
 
+    /**
+     * Creates an input controller and registers keyboard and touch listeners.
+     *
+     * @param canvas - Game canvas on which swipe gestures are captured
+     * @param onMove - Callback invoked with the requested movement direction
+     */
     constructor(
         canvas: HTMLCanvasElement,
         onMove: (direction: Direction) => void,

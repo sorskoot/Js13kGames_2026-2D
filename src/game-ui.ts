@@ -1,6 +1,9 @@
 import {NAMES, UNICORN_TIER} from './game-data.js';
 import {paintGem, paintRainbow, paintStar, paintUnicorn} from './magic-art.js';
 
+/**
+ * Manages score, progress, overlays, combo feedback, and decorative game UI.
+ */
 export class GameUI {
     private readonly scoreElement = document.getElementById('score')!;
     private readonly bestElement = document.getElementById('best')!;
@@ -14,6 +17,11 @@ export class GameUI {
     private currentTier = 0;
     private best = +(localStorage.getItem('rm_best') || 0);
 
+    /**
+     * Creates the game UI and wires its controls and responsive artwork.
+     *
+     * @param onNewGame - Callback invoked when a new game is requested
+     */
     constructor(onNewGame: () => void) {
         this.bestElement.textContent = String(this.best);
         document.getElementById('new')!.onclick = onNewGame;
@@ -38,10 +46,16 @@ export class GameUI {
         });
     }
 
+    /** Gets whether the end-game overlay is currently visible. */
     get overlayShown(): boolean {
         return this.overlay.classList.contains('shown');
     }
 
+    /**
+     * Updates the displayed score and persists a new best score when reached.
+     *
+     * @param score - Current game score
+     */
     updateScore(score: number): void {
         this.scoreElement.textContent = String(score);
         if (score > this.best) {
@@ -51,6 +65,12 @@ export class GameUI {
         }
     }
 
+    /**
+     * Displays the winning overlay for reaching the unicorn tier.
+     *
+     * @param score - Final or current score to display
+     * @param canContinue - Whether to offer the option to continue playing
+     */
     showWin(score: number, canContinue = true): void {
         this.overlay.classList.add('won');
         this.message.textContent = 'Hello, little unicorn!';
@@ -59,6 +79,11 @@ export class GameUI {
         this.showOverlay();
     }
 
+    /**
+     * Displays the game-over overlay when no legal moves remain.
+     *
+     * @param score - Final score to display
+     */
     showDead(score: number): void {
         this.overlay.classList.remove('won');
         this.message.textContent = 'A little cloud break';
@@ -67,6 +92,7 @@ export class GameUI {
         this.showOverlay();
     }
 
+    /** Hides the overlay and returns keyboard focus to the game canvas. */
     hideOverlay(): void {
         const wasShown = this.overlayShown;
         this.overlay.classList.add('hidden');
@@ -78,6 +104,7 @@ export class GameUI {
         }
     }
 
+    /** Resets transient combo, journey, and overlay UI state for a new game. */
     reset(): void {
         this.streak = 0;
         this.currentTier = 0;
@@ -87,6 +114,11 @@ export class GameUI {
         this.hideOverlay();
     }
 
+    /**
+     * Updates accessible board text and the visual tier-progress journey.
+     *
+     * @param grid - Current grid of numeric tile tiers
+     */
     updateJourney(grid: readonly (readonly number[])[]): void {
         document
             .getElementById('canvas')!
@@ -114,6 +146,12 @@ export class GameUI {
         });
     }
 
+    /**
+     * Shows combo feedback when a move produces enough merges or extends a streak.
+     *
+     * @param merges - Number of merges produced by the latest move
+     * @param tier - Highest tile tier involved in the latest move
+     */
     showCombo(merges: number, tier: number): void {
         this.streak = merges ? this.streak + 1 : 0;
         const combo = Math.max(merges, this.streak);
@@ -132,6 +170,7 @@ export class GameUI {
         }, 1250);
     }
 
+    /** Shows the overlay, disables the game area, and focuses its first visible button. */
     private showOverlay(): void {
         this.overlay.classList.add('shown');
         this.overlay.classList.remove('hidden');
@@ -140,6 +179,7 @@ export class GameUI {
         this.overlay.querySelector<HTMLButtonElement>('button:not(.hidden)')!.focus();
     }
 
+    /** Builds the tile-tier legend and paints an icon for each tier. */
     buildLegend(): void {
         const legend = document.getElementById('legend')!;
         legend.innerHTML = '';
@@ -160,6 +200,7 @@ export class GameUI {
         }
     }
 
+    /** Paints the decorative rainbow-unicorn mascot into the specified canvas. */
     private paintMascot(id: string): void {
         const canvas = document.getElementById(id) as HTMLCanvasElement;
         const context = canvas.getContext('2d')!;
@@ -188,6 +229,7 @@ export class GameUI {
         }
     }
 
+    /** Repaints the responsive background sky artwork for the current viewport. */
     private paintSky(): void {
         const canvas = document.getElementById('sky') as HTMLCanvasElement;
         const ratio = Math.min(devicePixelRatio || 1, 2);

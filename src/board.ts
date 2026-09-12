@@ -1,29 +1,41 @@
 import {GRID_SIZE, UNICORN_TIER} from './game-data.js';
 import type {CellCoordinates, Direction, MoveAnimation} from './game-data.js';
 
+/**
+ * Manages the tile grid, score, win state, and movement rules for the game board.
+ */
 export class Board {
     private cells: number[][] = [];
     private currentScore = 0;
     private hasWon = false;
 
+    /** Gets the current tile grid as a read-only view. */
     get grid(): readonly (readonly number[])[] {
         return this.cells;
     }
 
+    /** Gets the score accumulated from tile merges. */
     get score(): number {
         return this.currentScore;
     }
 
+    /** Gets whether a tile has reached the unicorn tier. */
     get won(): boolean {
         return this.hasWon;
     }
 
+    /** Resets the grid, score, and win state to their initial values. */
     reset(): void {
         this.cells = Array.from({length: GRID_SIZE}, () => Array<number>(GRID_SIZE).fill(0));
         this.currentScore = 0;
         this.hasWon = false;
     }
 
+    /**
+     * Adds a randomly valued tile to a randomly selected empty cell.
+     *
+     * @returns The coordinates of the added tile, or `undefined` when the grid is full
+     */
     addTile(): CellCoordinates | undefined {
         const empty = this.emptyCells();
         if (!empty.length) {
@@ -34,6 +46,12 @@ export class Board {
         return [row, column];
     }
 
+    /**
+     * Slides and merges tiles in the requested direction.
+     *
+     * @param direction - The direction in which to move the tiles
+     * @returns Movement and merge animation data when the board changes, or `undefined` otherwise
+     */
     move(direction: Direction) {
         let moved = false;
         const merges: CellCoordinates[] = [];
@@ -110,6 +128,11 @@ export class Board {
         }
     }
 
+    /**
+     * Determines whether the board has at least one legal move remaining.
+     *
+     * @returns `true` when an empty cell or mergeable pair remains; otherwise `false`
+     */
     hasMoves(): boolean {
         if (this.emptyCells().length) {
             return true;
@@ -130,6 +153,7 @@ export class Board {
         return false;
     }
 
+    /** Gets the coordinates of all currently empty cells. */
     private emptyCells(): CellCoordinates[] {
         const empty: CellCoordinates[] = [];
         for (let row = 0; row < GRID_SIZE; row++) {
@@ -142,6 +166,7 @@ export class Board {
         return empty;
     }
 
+    /** Gets the cell coordinates for a board line in movement traversal order. */
     private lineOf(index: number, direction: Direction): CellCoordinates[] {
         const line: CellCoordinates[] = [];
         for (let offset = 0; offset < GRID_SIZE; offset++) {

@@ -124,13 +124,14 @@ function printAndCheck(size: number, zipPath: string) {
 
 async function build(mode: BuildMode) {
     clearDist();
+
     const result = await esbuild.build({
         entryPoints: ['src/main.ts'],
         bundle: true,
         outfile: 'dist/b.js',
         format: 'esm',
         target: 'es2022',
-        define: { DEBUG: 'false' },
+        define: { DEBUG: mode === 'dev'?'true':'false' },
         sourcemap: mode === 'dev',
         minify: mode === 'prod',
         treeShaking: mode === 'prod',

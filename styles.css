@@ -51,20 +51,19 @@ body {
     margin-bottom: 9px;
 }
 h1 {
-    font-size: 37px;
+    font-size: 38px;
     line-height: 1.07;
     font-weight: 900;
-    color: #706092;
-    text-shadow: 0 2px 0 #fff;
-}
-h1 span {
     display: block;
-    color: var(--rose);
+    background-image: var(--rainbow);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
 }
 #mascot {
     position: relative;
-    width: 138px;
-    flex: 0 0 138px;
+    /* width: 138px;
+    flex: 0 0 138px; */
     text-align: center;
 }
 #goal-art {
@@ -83,7 +82,7 @@ h1 span {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 5px 15px;
+    margin: 0 0 15px;
 }
 #scores {
     display: flex;
@@ -482,7 +481,7 @@ h2 {
         height: 96px;
     }
     h1 {
-        font-size: 32px;
+        font-size: 38px;
     }
     #footer {
         margin-top: 15px;

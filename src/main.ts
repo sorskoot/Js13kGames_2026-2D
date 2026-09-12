@@ -5,6 +5,12 @@ import {Renderer} from './renderer.js';
 import type {Direction} from './game-data.js';
 import {MOVE_DURATION} from './game-data.js';
 
+declare const DEBUG: boolean;
+DEBUG && new EventSource('/esbuild').addEventListener('change', () => location.reload());
+
+/**
+ * Coordinates board state, rendering, input, UI, and the main game loop.
+ */
 class Game {
     private readonly board = new Board();
     private readonly renderer: Renderer;
@@ -15,6 +21,11 @@ class Game {
     private moveTimer = 0;
     private winTimer = 0;
 
+    /**
+     * Creates and starts a game bound to the supplied canvas.
+     *
+     * @param canvas - Canvas used to render the game and receive touch input
+     */
     constructor(canvas: HTMLCanvasElement) {
         this.renderer = new Renderer(canvas);
         this.ui = new GameUI(this.newGame);
@@ -27,6 +38,7 @@ class Game {
         this.draw();
     }
 
+    /** Resets all game state and starts a fresh board with two tiles. */
     private readonly newGame = (): void => {
         clearTimeout(this.moveTimer);
         clearTimeout(this.winTimer);
@@ -42,6 +54,7 @@ class Game {
         this.ui.updateJourney(this.board.grid);
     };
 
+    /** Adds a random tile to the board and starts its spawn animation. */
     private addTile(): void {
         const coordinates = this.board.addTile();
         if (coordinates) {
@@ -49,6 +62,7 @@ class Game {
         }
     }
 
+    /** Handles a requested move and coordinates its resulting animations and game state. */
     private readonly move = (direction: Direction): void => {
         if (this.dead || this.busy || this.ui.overlayShown) {
             return;
@@ -87,6 +101,7 @@ class Game {
         }, MOVE_DURATION + 150);
     };
 
+    /** Draws the current board state and schedules the next animation frame. */
     private readonly draw = (): void => {
         this.renderer.draw(this.board.grid);
         requestAnimationFrame(this.draw);

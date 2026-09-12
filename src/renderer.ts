@@ -4,6 +4,9 @@ import {paintGem, paintRainbow, paintStar, paintUnicorn} from './magic-art.js';
 
 type Grid = readonly (readonly number[])[];
 
+/**
+ * Renders the game board, tile animations, particles, and win celebration.
+ */
 export class Renderer {
     private readonly canvas: HTMLCanvasElement;
     private readonly context: CanvasRenderingContext2D;
@@ -20,11 +23,17 @@ export class Renderer {
     private pad = 0;
     private size = 0;
 
+    /**
+     * Creates a renderer for the supplied game canvas.
+     *
+     * @param canvas - Canvas on which the board is rendered
+     */
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d')!;
     }
 
+    /** Recalculates canvas resolution and board geometry for the current viewport. */
     layout(): void {
         const ratio = Math.min(devicePixelRatio || 1, 2);
         this.size = this.canvas.clientWidth;
@@ -38,6 +47,7 @@ export class Renderer {
         this.celebrationContext.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
 
+    /** Clears all active animations, particles, and celebration state. */
     reset(): void {
         this.animations = [];
         this.particles = [];
@@ -46,10 +56,22 @@ export class Renderer {
         this.celebrationContext.clearRect(0, 0, innerWidth, innerHeight);
     }
 
+    /**
+     * Starts a spawn animation for a newly added tile.
+     *
+     * @param coordinates - Row and column of the spawned tile
+     */
     spawnTile([row, column]: CellCoordinates): void {
         this.animations.push({r: row, c: column, type: 'spawn', t: performance.now()});
     }
 
+    /**
+     * Starts tile movement and merge-pop animations for a completed board move.
+     *
+     * @param movements - Tile movements produced by the board
+     * @param merges - Coordinates at which tile merges occurred
+     * @param grid - Board state after the move
+     */
     animateMove(movements: Omit<MoveAnimation, 'type'>[], merges: CellCoordinates[], grid: Grid): void {
         const now = performance.now();
         this.animations = movements.map(movement => ({
@@ -62,6 +84,11 @@ export class Renderer {
         });
     }
 
+    /**
+     * Starts the unicorn win celebration unless reduced motion is requested.
+     *
+     * @param grid - Current board used to locate winning unicorn tiles
+     */
     celebrate(grid: Grid): void {
         if (this.motion.matches) {
             return;
@@ -84,6 +111,11 @@ export class Renderer {
         }
     }
 
+    /**
+     * Renders one frame of the board and advances active visual effects.
+     *
+     * @param grid - Current board state to render
+     */
     draw(grid: Grid): void {
         const context = this.context;
         const size = this.size;
@@ -185,6 +217,7 @@ export class Renderer {
         this.drawCelebration(now, delta);
     }
 
+    /** Gets the canvas position of a grid cell's top-left corner. */
     private cellPos(row: number, column: number) {
         return {
             x: this.pad + column * (this.cell + this.pad),
@@ -192,6 +225,7 @@ export class Renderer {
         };
     }
 
+    /** Creates a particle burst at the specified canvas position. */
     private burst(centerX: number, centerY: number, tier: number, celebration = false): void {
         const particles = celebration ? this.confetti : this.particles;
         const count = celebration ? 100 : 8 + tier * 4;
@@ -215,6 +249,7 @@ export class Renderer {
         }
     }
 
+    /** Advances and paints a collection of particles for the current frame. */
     private drawParticles(context: CanvasRenderingContext2D, particles: Particle[], delta: number): void {
         for (let index = particles.length - 1; index >= 0; index--) {
             const particle = particles[index];
@@ -241,6 +276,7 @@ export class Renderer {
         }
     }
 
+    /** Advances and paints the full-screen win celebration. */
     private drawCelebration(now: number, delta: number): void {
         const context = this.celebrationContext;
         if (!this.celebrationStart && !this.confetti.length) {
@@ -281,6 +317,7 @@ export class Renderer {
         }
     }
 
+    /** Creates a rounded-rectangle path on the board rendering context. */
     private roundRect(left: number, top: number, width: number, height: number, radius: number): void {
         const context = this.context;
         context.beginPath();
@@ -292,6 +329,7 @@ export class Renderer {
         context.closePath();
     }
 
+    /** Paints a tile with the supplied position, tier, and animation scale. */
     private drawTile(
         left: number,
         top: number,
@@ -310,6 +348,7 @@ export class Renderer {
         context.restore();
     }
 
+    /** Applies cubic ease-out interpolation to normalized animation progress. */
     private ease(progress: number): number {
         return 1 - Math.pow(1 - progress, 3);
     }

@@ -1,5 +1,12 @@
 import {COLORS, UNICORN_TIER} from './game-data.js';
 
+/**
+ * Paints a filled star centered on the canvas context origin.
+ *
+ * @param context - Canvas context to paint into
+ * @param radius - Outer radius of the star
+ * @param points - Number of star points
+ */
 export function paintStar(context: CanvasRenderingContext2D, radius: number, points = 4): void {
     context.beginPath();
     for (let index = 0; index < points * 2; index++) {
@@ -11,6 +18,11 @@ export function paintStar(context: CanvasRenderingContext2D, radius: number, poi
     context.fill();
 }
 
+/**
+ * Paints the rainbow-and-cloud symbol in its 100-unit design space.
+ *
+ * @param context - Canvas context to paint into
+ */
 export function paintRainbow(context: CanvasRenderingContext2D): void {
     context.save();
     context.lineWidth = 7;
@@ -31,6 +43,11 @@ export function paintRainbow(context: CanvasRenderingContext2D): void {
     context.restore();
 }
 
+/**
+ * Paints the unicorn mascot in its design-space coordinates.
+ *
+ * @param context - Canvas context to paint into
+ */
 export function paintUnicorn(context: CanvasRenderingContext2D): void {
     context.save();
     context.lineJoin = 'round';
@@ -92,6 +109,12 @@ export function paintUnicorn(context: CanvasRenderingContext2D): void {
     context.restore();
 }
 
+/**
+ * Paints the decorative symbol associated with a tile tier.
+ *
+ * @param context - Canvas context to paint into
+ * @param tier - Numeric tile tier whose symbol should be painted
+ */
 export function paintSymbol(context: CanvasRenderingContext2D, tier: number): void {
     if (tier === UNICORN_TIER) {
         paintUnicorn(context);
@@ -124,6 +147,14 @@ export function paintSymbol(context: CanvasRenderingContext2D, tier: number): vo
     context.restore();
 }
 
+/**
+ * Paints a complete gem tile, including its tier symbol and visual effects.
+ *
+ * @param context - Canvas context to paint into
+ * @param size - Width and height of the gem in canvas units
+ * @param tier - Numeric tile tier determining its color and symbol
+ * @param time - Animation time in milliseconds used for animated effects
+ */
 export function paintGem(context: CanvasRenderingContext2D, size: number, tier: number, time = 0): void {
     context.save();
     context.scale(size / 100, size / 100);
